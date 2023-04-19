@@ -96,9 +96,10 @@ defmodule GoogleNews.Fetch do
   end
 
   defp request(uri, nil, nil) do
-    args = [uri, []]
+    http_client = http_client()
+    args = if http_client == Req, do: [uri, [log_redirects: false]], else: [uri, []]
 
-    http_client() |> apply(:get, args)
+    http_client |> apply(:get, args)
   end
 
   defp request(uri, proxy, nil) when not is_nil(proxy) do
